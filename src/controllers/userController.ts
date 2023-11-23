@@ -58,33 +58,52 @@ const getSingleUser = async (req: Request, res: Response) => {
     })
   }
 }
-// Controller
 const updateUser = async (req: Request, res: Response) => {
-    try {
-      const userId = req.params.userId; 
-      const userIdAsNumber = parseInt(userId)
-      const userData = req.body;
-      const result = await UserServices.updateUser(userIdAsNumber, userData); 
-      res.status(200).json({
-        success: true,
-        message: 'User updated successfully!',
-        data: result,
-      });
-    } catch (error: any) {
-      res.status(500).json({
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
-  };
-  
+  try {
+    const userId = req.params.userId
+    const userIdAsNumber = parseInt(userId)
+    const userData = req.body
+    const result = await UserServices.updateUser(userIdAsNumber, userData)
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    })
+  }
+}
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId
+    const userIdAsNumber = parseInt(userId)
+
+    await UserServices.deleteUser(userIdAsNumber)
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    })
+  }
+}
 
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
+  deleteUser
 }
