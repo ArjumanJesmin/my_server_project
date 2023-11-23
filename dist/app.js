@@ -11,3 +11,4 @@ app.use((0, cors_1.default)());
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+exports.default = app;
