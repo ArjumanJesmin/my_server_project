@@ -40,7 +40,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 }
 const getSingleUser = async (req: Request, res: Response) => {
   const { userId } = req.params
-  const userIdAsNumber = parseInt(userId); 
+  const userIdAsNumber = parseInt(userId)
   try {
     const result = await UserServices.getSingleUser(userIdAsNumber)
     res.status(200).json({
@@ -58,9 +58,33 @@ const getSingleUser = async (req: Request, res: Response) => {
     })
   }
 }
+// Controller
+const updateUser = async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.userId; 
+      const userIdAsNumber = parseInt(userId)
+      const userData = req.body;
+      const result = await UserServices.updateUser(userIdAsNumber, userData); 
+      res.status(200).json({
+        success: true,
+        message: 'User updated successfully!',
+        data: result,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  };
+  
 
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
+  updateUser,
 }
