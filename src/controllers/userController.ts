@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
 import { UserServices } from '../services/user.Service'
+import { UserValidationSchema } from '../zod/user.validation'
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body
-    const result = UserServices.createUserIntoDB(user)
+    const zodParsedData = UserValidationSchema.parse(user)
+    const result = UserServices.createUserIntoDB(zodParsedData)
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
@@ -100,10 +102,34 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
+// get orders
+const getUserOrders = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  const userIdAsNumber = parseInt(userId)
+  try {
+    const result = await UserServices.getUserOrders(userIdAsNumber)
+
+    res.status(200).json({
+      success: true,
+      message: 'User created successfully!',
+      data: result,
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    })
+  }
+}
+
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserOrders,
 }

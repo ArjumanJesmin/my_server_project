@@ -38,10 +38,17 @@ const deleteUser = async (userId: number): Promise<IUser | null> => {
   return result
 }
 
+//get orders
+const getUserOrders = async (userId: number): Promise<IUser | null> => {
+  const result = await User.findOne({ userId }, { orders: 1, _id: 0 })
+  return result
+}
+
 export const UserServices = {
   createUserIntoDB,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  getUserOrders,
 }
