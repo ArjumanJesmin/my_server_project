@@ -22,6 +22,39 @@ const createUser = async (req: Request, res: Response) => {
     })
   }
 }
+
+//update order
+const addOrdersToUser = async (req: Request, res: Response) => {
+  try {
+    const { userDetails, productName, price, quantity } = req.body
+
+    const user = {
+      ...userDetails,
+      orders: [
+        {
+          productName,
+          price,
+          quantity,
+        },
+      ],
+    }
+    const result = await UserServices.addOrderToUser(user)
+    res.status(200).json({
+      success: true,
+      message: 'User created successfully!',
+      data: result,
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    })
+  }
+}
+
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await UserServices.getAllUsers()
@@ -60,6 +93,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     })
   }
 }
+
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId
@@ -81,6 +115,7 @@ const updateUser = async (req: Request, res: Response) => {
     })
   }
 }
+
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId
@@ -111,7 +146,7 @@ const getUserOrders = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'User created successfully!',
+      message: 'Order fetched successfully!',
       data: result,
     })
   } catch (error: any) {
@@ -132,4 +167,5 @@ export const userControllers = {
   updateUser,
   deleteUser,
   getUserOrders,
+  addOrdersToUser,
 }

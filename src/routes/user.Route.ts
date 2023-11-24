@@ -6,7 +6,8 @@ router.post('/', userControllers.createUser)
 router.get('/', userControllers.getAllUsers)
 router.get('/:userId', userControllers.getSingleUser)
 router.put('/:userId', userControllers.updateUser)
+router.put('/:userId/orders', userControllers.addOrdersToUser);
 router.delete('/:userId', userControllers.deleteUser)
-router.delete('/:userId/orders', userControllers.getUserOrders)
+router.get('/:userId/orders', userControllers.getUserOrders)
 
 export const userRoutes = router

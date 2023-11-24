@@ -1,15 +1,20 @@
 import { Schema, model } from 'mongoose'
-import { Address, IUser } from '../interface/user.Interface'
+import {
+  Address,
+  IUser,
+  IUserMethods,
+  UserModel,
+} from '../interface/user.Interface'
 
 const addressSchema = new Schema<Address>({
   street: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
 })
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true,  unique: true},
   fullName: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -28,4 +33,9 @@ const userSchema = new Schema<IUser>({
   ],
 })
 
-export const User = model<IUser>('User', userSchema)
+userSchema.methods.isUserExists = async function (userId: number) {
+  const existingOrders = await User.findOne({ userId })
+  return existingOrders
+}
+
+export const User = model<IUser, UserModel>('User', userSchema)

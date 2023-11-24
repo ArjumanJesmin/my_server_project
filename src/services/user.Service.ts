@@ -1,9 +1,18 @@
+import { User } from './../models/user.Model'
 import { IUser } from '../interface/user.Interface'
-import { User } from '../models/user.Model'
 import { FilterQuery } from 'mongoose'
 
 const createUserIntoDB = async (user: IUser) => {
+  const createUser = new User(user)
+  if (await createUser.isUserExists(createUser.userId)) {
+    throw new Error('User already exists!')
+  }
   const result = await User.create(user)
+  return result
+}
+
+const addOrderToUser = async (user: IUser) => {
+  const result = await User.findOneAndUpdate(user)
   return result
 }
 
@@ -38,7 +47,6 @@ const deleteUser = async (userId: number): Promise<IUser | null> => {
   return result
 }
 
-//get orders
 const getUserOrders = async (userId: number): Promise<IUser | null> => {
   const result = await User.findOne({ userId }, { orders: 1, _id: 0 })
   return result
@@ -51,4 +59,5 @@ export const UserServices = {
   updateUser,
   deleteUser,
   getUserOrders,
+  addOrderToUser,
 }
