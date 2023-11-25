@@ -6,15 +6,20 @@ import {
   UserModel,
 } from '../interface/user.Interface'
 
+import bcrypt from 'bcrypt'
+import config from '../config'
+import { orderSchema } from './order.Model'
+
 const addressSchema = new Schema<Address>({
   street: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
 })
+
 const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true,  unique: true},
+  password: { type: String, required: true },
   fullName: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -24,13 +29,20 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   isActive: { type: Boolean, required: true },
   hobbies: [{ type: String }],
   address: addressSchema,
-  orders: [
-    {
-      productName: { type: String, required: true },
-      price: { type: Number, required: true },
-      quantity: { type: Number, required: true },
-    },
-  ],
+  orders: [orderSchema],
+})
+
+userSchema.pre('save', async function (next) {
+  const user = this
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  )
+  next()
+})
+userSchema.post('save', function (doc, next) {
+  doc.password = ''
+  next()
 })
 
 userSchema.methods.isUserExists = async function (userId: number) {

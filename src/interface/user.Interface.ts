@@ -1,10 +1,6 @@
-import { Model} from 'mongoose'
+import { Model } from 'mongoose'
+import { Order } from './order.interface'
 
-export type Order = {
-  productName: string
-  price: number
-  quantity: number
-}
 
 export type Address = {
   street: string
@@ -32,4 +28,5 @@ export type IUserMethods = {
   isUserExists(userId: number): Promise<IUser | null>
 }
 
-export type UserModel = Model<IUser, {}, IUserMethods>;
+export type UserModel = Model<IUser, {}, IUserMethods>
+
