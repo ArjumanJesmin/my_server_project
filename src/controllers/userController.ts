@@ -23,8 +23,6 @@ const createUser = async (req: Request, res: Response) => {
   }
 }
 
-
-
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await UserServices.getAllUsers()
@@ -47,8 +45,11 @@ const getSingleUser = async (req: Request, res: Response) => {
   const userId = req.params.userId
   const userIdAsNumber = parseInt(userId)
   const userData = req.body
+
   try {
-    const result = await UserServices.getSingleUser(userIdAsNumber, userData)
+    const userOne = await UserServices.getSingleUser(userIdAsNumber, userData)
+     const zodParsedData = UserValidationSchema.parse(userOne)
+    const result = UserServices.createUserIntoDB(zodParsedData)
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
@@ -108,12 +109,10 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
-
-
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
 }
