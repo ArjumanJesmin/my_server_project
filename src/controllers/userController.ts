@@ -47,9 +47,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   const userData = req.body
 
   try {
-    const userOne = await UserServices.getSingleUser(userIdAsNumber, userData)
-     const zodParsedData = UserValidationSchema.parse(userOne)
-    const result = UserServices.createUserIntoDB(zodParsedData)
+    const result = await UserServices.getSingleUser(userIdAsNumber, userData)
     res.status(200).json({
       success: true,
       message: 'User created successfully!',

@@ -57,9 +57,7 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const userIdAsNumber = parseInt(userId);
     const userData = req.body;
     try {
-        const userOne = yield user_Service_1.UserServices.getSingleUser(userIdAsNumber, userData);
-        const zodParsedData = user_validation_1.UserValidationSchema.parse(userOne);
-        const result = user_Service_1.UserServices.createUserIntoDB(zodParsedData);
+        const result = yield user_Service_1.UserServices.getSingleUser(userIdAsNumber, userData);
         res.status(200).json({
             success: true,
             message: 'User created successfully!',
