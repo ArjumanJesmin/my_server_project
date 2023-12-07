@@ -33,39 +33,35 @@ const getUserOrders = async (userId: number): Promise<IUser | null> => {
   return result
 }
 
-
-
- const calculateTotalPrice = async (userId:number): Promise<number | null> => {
-    try {
-      const aggregateResult = await User.aggregate([
-        {
-          $match: { userId: Number(userId) },
-        },
-        {  $unwind: '$orders',  },
-        {
-          $group: {
-            _id: null,
-            totalPrice: {
-              $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
-            },
+const calculateTotalPrice = async (userId: number): Promise<number | null> => {
+  try {
+    const aggregateResult = await User.aggregate([
+      {
+        $match: { userId: Number(userId) },
+      },
+      { $unwind: '$orders' },
+      {
+        $group: {
+          _id: null,
+          totalPrice: {
+            $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
           },
         },
-      ])
+      },
+    ])
 
-      if (aggregateResult.length === 0) {
-        return null
-      }
-
-      return aggregateResult[0].totalPrice
-    } catch (error:any) {
-      throw new Error(error.message)
+    if (aggregateResult.length === 0) {
+      return null
     }
+
+    return aggregateResult[0].totalPrice
+  } catch (error: any) {
+    throw new Error(error.message)
   }
-
-
+}
 
 export const OrderServices = {
   getUserOrders,
   addOrderToUser,
-  calculateTotalPrice
+  calculateTotalPrice,
 }

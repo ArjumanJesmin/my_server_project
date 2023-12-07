@@ -16,6 +16,9 @@ const createUserIntoDB = async (user: IUser) => {
   return result
 }
 
+
+
+
 const getAllUsers = async (): Promise<IUser[]> => {
   const result = await User.find(
     {},

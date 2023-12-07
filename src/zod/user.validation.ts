@@ -28,7 +28,7 @@ const UserValidationSchema = z
     isActive: z.boolean(),
     hobbies: z.array(z.string()),
     address: AddressValidationSchema,
-    orders: z.array(OrderValidationSchema),
+    orders: z.array(OrderValidationSchema).optional(),
   })
   .strict()
 
