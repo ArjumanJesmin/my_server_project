@@ -30,7 +30,7 @@ const UserValidationSchema = zod_1.z
     isActive: zod_1.z.boolean(),
     hobbies: zod_1.z.array(zod_1.z.string()),
     address: AddressValidationSchema,
-    orders: zod_1.z.array(OrderValidationSchema),
+    orders: zod_1.z.array(OrderValidationSchema).optional(),
 })
     .strict();
 exports.UserValidationSchema = UserValidationSchema;

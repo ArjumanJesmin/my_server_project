@@ -8,7 +8,7 @@ import {
 
 import bcrypt from 'bcrypt'
 import config from '../config'
-import { orderSchema } from './order.Model'
+import { Order } from '../interface/order.interface'
 
 const addressSchema = new Schema<Address>({
   street: { type: String, required: true },
@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   isActive: { type: Boolean, required: true },
   hobbies: [{ type: String }],
   address: addressSchema,
-  orders: [orderSchema],
+  orders: [{ type: Object }] as unknown as Order[],
 })
 
 userSchema.pre('save', async function (next) {

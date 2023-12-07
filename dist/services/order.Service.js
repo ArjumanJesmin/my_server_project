@@ -43,7 +43,7 @@ const calculateTotalPrice = (userId) => __awaiter(void 0, void 0, void 0, functi
             {
                 $match: { userId: Number(userId) },
             },
-            { $unwind: '$orders', },
+            { $unwind: '$orders' },
             {
                 $group: {
                     _id: null,
@@ -65,5 +65,5 @@ const calculateTotalPrice = (userId) => __awaiter(void 0, void 0, void 0, functi
 exports.OrderServices = {
     getUserOrders,
     addOrderToUser,
-    calculateTotalPrice
+    calculateTotalPrice,
 };

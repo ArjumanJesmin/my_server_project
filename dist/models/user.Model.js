@@ -16,7 +16,6 @@ exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../config"));
-const order_Model_1 = require("./order.Model");
 const addressSchema = new mongoose_1.Schema({
     street: { type: String, required: true },
     city: { type: String, required: true },
@@ -35,7 +34,7 @@ const userSchema = new mongoose_1.Schema({
     isActive: { type: Boolean, required: true },
     hobbies: [{ type: String }],
     address: addressSchema,
-    orders: [order_Model_1.orderSchema],
+    orders: [{ type: Object }],
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
