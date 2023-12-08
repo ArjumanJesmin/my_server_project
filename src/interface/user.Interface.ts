@@ -9,6 +9,7 @@ export type Address = {
 }
 
 export interface IUser {
+  toObject: any
   userId: number
   username: string
   password: string

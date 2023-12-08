@@ -1,23 +1,25 @@
 import { User } from './../models/user.Model'
 import { IUser } from '../interface/user.Interface'
 import { FilterQuery } from 'mongoose'
+const bcrypt = require('bcrypt')
 
 const createUserIntoDB = async (user: IUser) => {
-  const createUser = new User(user)
-  if (await createUser.isUserExists(createUser.userId)) {
-    throw new Error('User already exists!')
+  try {
+    const { password, ...otherUserData } = user
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const newUser = new User({
+      ...otherUserData,
+      password: hashedPassword,
+    })
+
+    const savedUser = await newUser.save()
+    return savedUser
+  } catch (error: any) {
+    throw new Error(error.message)
   }
-  const userSelect = await User.create(user)
-  const result = User.findOne({ userId: userSelect.userId }).select({
-    _id: 0,
-    password: 0,
-    orders: 0,
-  })
-  return result
 }
-
-
-
 
 const getAllUsers = async (): Promise<IUser[]> => {
   const result = await User.find(

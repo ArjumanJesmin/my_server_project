@@ -8,21 +8,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const user_Model_1 = require("./../models/user.Model");
+const bcrypt = require('bcrypt');
 const createUserIntoDB = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const createUser = new user_Model_1.User(user);
-    if (yield createUser.isUserExists(createUser.userId)) {
-        throw new Error('User already exists!');
+    try {
+        const { password } = user, otherUserData = __rest(user, ["password"]);
+        const hashedPassword = yield bcrypt.hash(password, 10);
+        const newUser = new user_Model_1.User(Object.assign(Object.assign({}, otherUserData), { password: hashedPassword }));
+        const savedUser = yield newUser.save();
+        return savedUser;
     }
-    const userSelect = yield user_Model_1.User.create(user);
-    const result = user_Model_1.User.findOne({ userId: userSelect.userId }).select({
-        _id: 0,
-        password: 0,
-        orders: 0,
-    });
-    return result;
+    catch (error) {
+        throw new Error(error.message);
+    }
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_Model_1.User.find({}, {

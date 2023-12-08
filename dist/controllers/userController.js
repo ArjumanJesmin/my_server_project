@@ -11,12 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
 const user_Service_1 = require("../services/user.Service");
-const user_validation_1 = require("../zod/user.validation");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.body;
-        const zodParsedData = user_validation_1.UserValidationSchema.parse(user);
-        const result = user_Service_1.UserServices.createUserIntoDB(zodParsedData);
+        const newUser = req.body;
+        const result = yield user_Service_1.UserServices.createUserIntoDB(newUser);
+        if ('password' in result) {
+            delete result['password'];
+        }
         res.status(201).json({
             success: true,
             message: 'User created successfully!',
